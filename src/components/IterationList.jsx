@@ -144,13 +144,13 @@ function IterationList({ iterations, selectedElement, visibleIterations, onToggl
           {selectedElement.type === 'tangent' && (
             <div className="flex flex-col gap-1">
               <p className="m-0 text-[13px] font-mono" style={{ color: 'var(--accent-primary)' }}>
-                <span className="katex-render" data-latex={`\\text{Slope} = ${selectedElement.slope.toFixed(6)}`}></span>
+                <span className="katex-render" data-latex={`\\text{Slope} = ${selectedElement.slope.toFixed(4)}`}></span>
               </p>
               <p className="m-0 text-[13px] font-mono" style={{ color: 'var(--accent-primary)' }}>
-                <span className="katex-render" data-latex={`\\text{y-intercept} = ${selectedElement.intercept.toFixed(6)}`}></span>
+                <span className="katex-render" data-latex={`\\text{y-intercept} = ${selectedElement.intercept.toFixed(4)}`}></span>
               </p>
               <p className="m-0 text-[13px] font-mono" style={{ color: 'var(--accent-primary)' }}>
-                <span className="katex-render" data-latex={`\\text{x-intercept} = ${selectedElement.xIntercept.toFixed(8)}`}></span>
+                <span className="katex-render" data-latex={`\\text{x-intercept} = ${selectedElement.xIntercept.toFixed(4)}`}></span>
               </p>
             </div>
           )}

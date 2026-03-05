@@ -165,6 +165,8 @@ function Controls({
   currentIteration,
   hasConverged,
   currentInitialGuess,
+  tangentLineMode,
+  onTangentLineModeChange,
 }) {
   const [expression, setExpression] = useState("x^2 - 2");
   const [latexExpression, setLatexExpression] = useState("x^2-2");
@@ -396,7 +398,7 @@ function Controls({
           className="m-0 mb-2 text-2xl font-semibold"
           style={{ color: "var(--text-primary)" }}
         >
-          Newton's Method Visualizer
+          Newton–Raphson Visualizer
         </h2>
         <button
           onClick={toggleTheme}
@@ -499,6 +501,56 @@ function Controls({
         >
           Reset
         </button>
+      </div>
+
+      <div className="flex flex-col gap-1.5">
+        <label
+          className="text-sm font-medium"
+          style={{ color: "var(--text-secondary)" }}
+        >
+          Tangent Lines:
+        </label>
+        <div className="flex gap-2 flex-wrap">
+          <button
+            onClick={() => onTangentLineModeChange('segment')}
+            className={`px-3 py-1.5 text-[13px] rounded cursor-pointer transition-all duration-150 ${
+              tangentLineMode === 'segment' ? 'ring-2 ring-blue-500' : ''
+            }`}
+            style={{
+              background: tangentLineMode === 'segment' ? 'var(--bg-tertiary)' : 'transparent',
+              border: '1px solid var(--border-secondary)',
+              color: 'var(--text-secondary)',
+            }}
+          >
+            Segment
+          </button>
+          <button
+            onClick={() => onTangentLineModeChange('full')}
+            className={`px-3 py-1.5 text-[13px] rounded cursor-pointer transition-all duration-150 ${
+              tangentLineMode === 'full' ? 'ring-2 ring-blue-500' : ''
+            }`}
+            style={{
+              background: tangentLineMode === 'full' ? 'var(--bg-tertiary)' : 'transparent',
+              border: '1px solid var(--border-secondary)',
+              color: 'var(--text-secondary)',
+            }}
+          >
+            Full Line
+          </button>
+          <button
+            onClick={() => onTangentLineModeChange('hidden')}
+            className={`px-3 py-1.5 text-[13px] rounded cursor-pointer transition-all duration-150 ${
+              tangentLineMode === 'hidden' ? 'ring-2 ring-blue-500' : ''
+            }`}
+            style={{
+              background: tangentLineMode === 'hidden' ? 'var(--bg-tertiary)' : 'transparent',
+              border: '1px solid var(--border-secondary)',
+              color: 'var(--text-secondary)',
+            }}
+          >
+            Hidden
+          </button>
+        </div>
       </div>
 
       {isActive && (
