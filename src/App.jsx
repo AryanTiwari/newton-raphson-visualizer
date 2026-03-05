@@ -14,6 +14,7 @@ function App() {
   const [error, setError] = useState('');
   const [initialGuess, setInitialGuess] = useState(3);
   const [visibleIterations, setVisibleIterations] = useState(new Set());
+  const [tangentLineMode, setTangentLineMode] = useState('segment'); // 'full', 'segment', or 'hidden'
 
   const solverRef = useRef(null);
 
@@ -102,6 +103,8 @@ function App() {
             currentIteration={iterations.length - 1}
             hasConverged={hasConverged}
             currentInitialGuess={initialGuess}
+            tangentLineMode={tangentLineMode}
+            onTangentLineModeChange={setTangentLineMode}
           />
           {error && (
             <div
@@ -123,6 +126,7 @@ function App() {
             solver={solverRef.current}
             iterations={iterations}
             visibleIterations={visibleIterations}
+            tangentLineMode={tangentLineMode}
             onElementClick={handleElementClick}
           />
         </main>

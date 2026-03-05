@@ -7,6 +7,7 @@ function Graph({
   solver,
   iterations,
   visibleIterations,
+  tangentLineMode = 'segment',
   onElementClick
 }) {
   const containerRef = useRef(null);
@@ -232,32 +233,53 @@ function Graph({
         }
       });
 
-      // Tangent line
-      const tangentLine = board.create('functiongraph', [
-        (t) => tangentSlope * t + tangentIntercept
-      ], {
-        strokeColor: color,
-        strokeWidth: 3.5,
-        dash: 2,
-        name: `Tangent ${idx}`,
-        withLabel: false,
-        highlight: true,
-        fixed: true
-      });
-      newElements.push(tangentLine);
+      // Tangent line (only draw if not hidden)
+      if (tangentLineMode !== 'hidden') {
+        const xIntercept = -tangentIntercept / tangentSlope;
 
-      tangentLine.on('down', () => {
-        if (onElementClick) {
-          const xIntercept = -tangentIntercept / tangentSlope;
-          onElementClick({
-            type: 'tangent',
-            name: `Tangent at x${idx}`,
-            slope: tangentSlope,
-            intercept: tangentIntercept,
-            xIntercept: xIntercept
+        let tangentElement;
+        if (tangentLineMode === 'segment') {
+          // Draw segment from point on curve to x-axis intercept
+          tangentElement = board.create('segment', [
+            [iter.x, iter.fx],
+            [xIntercept, 0]
+          ], {
+            strokeColor: color,
+            strokeWidth: 3.5,
+            dash: 2,
+            name: `Tangent ${idx}`,
+            withLabel: false,
+            highlight: true,
+            fixed: true
+          });
+        } else {
+          // Full tangent line across the graph
+          tangentElement = board.create('functiongraph', [
+            (t) => tangentSlope * t + tangentIntercept
+          ], {
+            strokeColor: color,
+            strokeWidth: 3.5,
+            dash: 2,
+            name: `Tangent ${idx}`,
+            withLabel: false,
+            highlight: true,
+            fixed: true
           });
         }
-      });
+        newElements.push(tangentElement);
+
+        tangentElement.on('down', () => {
+          if (onElementClick) {
+            onElementClick({
+              type: 'tangent',
+              name: `Tangent at x${idx}`,
+              slope: tangentSlope,
+              intercept: tangentIntercept,
+              xIntercept: xIntercept
+            });
+          }
+        });
+      }
 
       // Vertical line from point to x-axis
       const verticalLine = board.create('segment', [
@@ -319,7 +341,7 @@ function Graph({
     });
 
     elementsRef.current.iterationElements = newElements;
-  }, [iterations, visibleIterations, solver, clearIterations, onElementClick]);
+  }, [iterations, visibleIterations, tangentLineMode, solver, clearIterations, onElementClick]);
 
   const resetView = useCallback(() => {
     if (boardRef.current) {
