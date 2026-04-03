@@ -1,26 +1,26 @@
-import { useState, useCallback, useRef } from 'react';
-import Graph from './components/Graph';
-import Controls from './components/Controls';
-import IterationList from './components/IterationList';
-import { createNewtonSolver } from './utils/newton';
+import { useState, useCallback, useRef } from "react";
+import Graph from "./components/Graph";
+import Controls from "./components/Controls";
+import IterationList from "./components/IterationList";
+import { createNewtonSolver } from "./utils/newton";
 
 function App() {
-  const [functionExpression, setFunctionExpression] = useState('');
-  const [latexExpression, setLatexExpression] = useState('');
+  const [functionExpression, setFunctionExpression] = useState("");
+  const [latexExpression, setLatexExpression] = useState("");
   const [iterations, setIterations] = useState([]);
   const [isActive, setIsActive] = useState(false);
   const [hasConverged, setHasConverged] = useState(false);
   const [selectedElement, setSelectedElement] = useState(null);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [initialGuess, setInitialGuess] = useState(3);
   const [visibleIterations, setVisibleIterations] = useState(new Set());
-  const [tangentLineMode, setTangentLineMode] = useState('segment'); // 'full', 'segment', or 'hidden'
+  const [tangentLineMode, setTangentLineMode] = useState("segment"); // 'full', 'segment', or 'hidden'
 
   const solverRef = useRef(null);
 
   const handleGraphFunction = useCallback((expression, latex, guess) => {
     try {
-      setError('');
+      setError("");
       setSelectedElement(null);
 
       // Create new solver
@@ -45,13 +45,15 @@ function App() {
     if (!solverRef.current) return;
 
     try {
-      setError('');
+      setError("");
       solverRef.current.nextIteration();
       const newIterations = solverRef.current.getIterations();
       setIterations(newIterations);
 
       // Add new iteration to visible set
-      setVisibleIterations(prev => new Set([...prev, newIterations.length - 1]));
+      setVisibleIterations(
+        (prev) => new Set([...prev, newIterations.length - 1]),
+      );
 
       // Check for convergence
       if (solverRef.current.hasConverged()) {
@@ -64,19 +66,19 @@ function App() {
 
   const handleReset = useCallback(() => {
     solverRef.current = null;
-    setFunctionExpression('');
-    setLatexExpression('');
+    setFunctionExpression("");
+    setLatexExpression("");
     setIterations([]);
     setVisibleIterations(new Set());
     setIsActive(false);
     setHasConverged(false);
     setSelectedElement(null);
-    setError('');
+    setError("");
   }, []);
 
   // Toggle visibility of an iteration
   const handleToggleIteration = useCallback((index) => {
-    setVisibleIterations(prev => {
+    setVisibleIterations((prev) => {
       const newSet = new Set(prev);
       if (newSet.has(index)) {
         newSet.delete(index);
@@ -92,7 +94,10 @@ function App() {
   }, []);
 
   return (
-    <div className="min-h-screen transition-colors duration-300" style={{ background: 'var(--bg-primary)' }}>
+    <div
+      className="min-h-screen transition-colors duration-300"
+      style={{ background: "var(--bg-primary)" }}
+    >
       <div className="grid grid-cols-1 xl:grid-cols-[320px_1fr_350px] 2xl:grid-cols-[320px_1fr_350px] gap-5 p-5 min-h-screen max-w-[1800px] mx-auto max-xl:grid-cols-1 max-xl:grid-rows-[auto_1fr_auto]">
         <aside className="flex flex-col gap-4 max-xl:order-1">
           <Controls
@@ -110,9 +115,9 @@ function App() {
             <div
               className="px-4 py-3 rounded-lg text-sm"
               style={{
-                background: 'var(--error-bg)',
-                border: '1px solid var(--error-border)',
-                color: 'var(--error-text)'
+                background: "var(--error-bg)",
+                border: "1px solid var(--error-border)",
+                color: "var(--error-text)",
               }}
             >
               {error}
@@ -141,6 +146,22 @@ function App() {
           />
         </aside>
       </div>
+
+      {/* Footer */}
+      <footer
+        className="mt-0 pt-6 pb-4 border-t"
+        style={{
+          borderColor: "var(--border-primary)",
+        }}
+      >
+        <div
+          className="text-center text-sm"
+          style={{ color: "var(--text-secondary)" }}
+        >
+          <p className="mb-1">Aryan Tiwari &middot; Sara Pollock</p>
+          <p>This work was funded by The National Science Foundation DMS-2045059 (CAREER)</p>
+        </div>
+      </footer>
     </div>
   );
 }
